@@ -65,6 +65,7 @@ app.get('/start-zoom-auth', (req, res) => {
     req.session.teacherEmail = teacher?.toString() ?? ""
     //@ts-ignore
     req.session.consultationId = consultationId?.toString() ?? ""
+    console.log(req.session.consultationId)
     res.json({link: `https://zoom.us/oauth/authorize?response_type=code&client_id=aDq5XQyeTFOuObuUlzvenA&redirect_uri=${REDIRECT_URI}`})
     res.end()
 })
