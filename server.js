@@ -126,7 +126,7 @@ app.get('/auth/callback', async (req, res) => {
                     //@ts-ignore
                     req.sessionStore.set(Object.keys(req.sessionStore.sessions)[0], {...JSON.parse(Object.values(req.sessionStore.sessions)[0].split(" ")[0]), join_url: data.join_url})
                     const db = admin.firestore()
-                    console.log(req.session.consultationId)
+                    console.log(Object.values(req.sessionStore.sessions))
                     //@ts-ignore
                     const consultationId = JSON.parse(Object.values(req.sessionStore.sessions)[0].split(" ")[0]).consultationId
                     const consultationRef = db.collection('consultationSessions').doc(consultationId);
