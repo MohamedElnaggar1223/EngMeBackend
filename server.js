@@ -7,7 +7,7 @@ const corsOptions = require('./corsOptions')
 const querystring = require('querystring')
 const PORT = process.env.PORT || 3001
 
-const REDIRECT_URI = 'http://localhost:3001/auth/callback';
+const REDIRECT_URI = 'https://engmebackendzoom.onrender.com/auth/callback';
 
 var admin = require("firebase-admin");
 
@@ -65,7 +65,7 @@ app.get('/start-zoom-auth', (req, res) => {
     req.session.teacherEmail = teacher?.toString() ?? ""
     //@ts-ignore
     req.session.consultationId = consultationId?.toString() ?? ""
-    res.json({link: `https://zoom.us/oauth/authorize?response_type=code&client_id=aDq5XQyeTFOuObuUlzvenA&redirect_uri=http://localhost:3001/auth/callback`})
+    res.json({link: `https://zoom.us/oauth/authorize?response_type=code&client_id=aDq5XQyeTFOuObuUlzvenA&redirect_uri=${REDIRECT_URI}`})
     res.end()
 })
 
@@ -134,7 +134,7 @@ app.get('/auth/callback', async (req, res) => {
 
                 //@ts-ignore
                 req.session.destroy(() => req.sessionStore.destroy(Object.keys(req.sessionStore.sessions)[0]))
-                res.redirect("http://localhost:5173")
+                res.redirect("https://eng-me-black.vercel.app")
                 res.end()
             }
             catch(e)
@@ -152,5 +152,5 @@ app.get('/auth/callback', async (req, res) => {
 })
 
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on ${PORT}`);
 });
