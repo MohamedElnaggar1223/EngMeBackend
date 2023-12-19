@@ -126,11 +126,11 @@ app.get('/auth/callback', async (req, res) => {
                     //@ts-ignore
                     req.sessionStore.set(Object.keys(req.sessionStore.sessions)[0], {...JSON.parse(Object.values(req.sessionStore.sessions)[0].split(" ")[0]), join_url: data.join_url})
                     const db = admin.firestore()
-                    console.log('values: ', Object.values(req.sessionStore.sessions))
-                    console.log('valuesNoStore: ', req.sessionStore.sessions)
-                    console.log('valuesparsed: ', JSON.parse(Object.values(req.sessionStore.sessions)[0]))
+                    // console.log('values: ', Object.values(req.sessionStore.sessions))
+                    // console.log('valuesNoStore: ', req.sessionStore.sessions)
+                    // console.log('valuesparsed: ', JSON.parse(Object.values(req.sessionStore.sessions)[0]))
                     //@ts-ignore
-                    const consultationId = JSON.parse(Object.values(req.sessionStore.sessions)[0].split(" ")[0]).consultationId
+                    const consultationId = JSON.parse(Object.values(req.sessionStore.sessions)[0].split(" ")[1]).consultationId
                     const consultationRef = db.collection('consultationSessions').doc(consultationId);
 
                     consultationRef.update({ meetingLink: data.join_url })
