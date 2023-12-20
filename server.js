@@ -52,6 +52,10 @@ app.use(express.json())
 
 const axiosEndPoint = new axios.Axios()
 
+app.get('/', (req, res) => {
+    return res.status(200).json('initiated server connection')
+})
+
 app.get('/start-zoom-auth', (req, res) => {
     const startTime = req.query.startTime
     const teacher = req.query.teacher
