@@ -151,6 +151,8 @@ app.get('/auth/callback', async (req, res) => {
                 }).then(() => {
                     //@ts-ignore
                     // req.session.destroy(() => req.sessionStore.destroy(Object.keys(req.sessionStore.sessions)[0]))
+                    startTime = ''
+                    consultationId = ''
                     res.redirect("https://eng-me-black.vercel.app")
                     return res.end()
                 })
