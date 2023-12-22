@@ -78,7 +78,7 @@ app.get('/start-zoom-auth', (req, res) => {
     //@ts-ignore
     consultationId = consultation?.toString() ?? ""
     // console.log(req.session.consultationId)
-    res.json({link: `https://zoom.us/oauth/authorize?response_type=code&client_id=aDq5XQyeTFOuObuUlzvenA&redirect_uri=${REDIRECT_URI}`})
+    res.json({link: `https://zoom.us/oauth/authorize?client_id=iIs1PioQoqKJpB5Bh8mow&response_type=code&redirect_uri=${REDIRECT_URI}`})
     return res.end()
 })
 
