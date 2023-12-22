@@ -39,8 +39,8 @@ const { v4: uuidv4 } = require('uuid');
 
 app.use(session({
     secret: uuidv4(),
-    resave: true,
-    saveUninitialized: true,
+    resave: false,
+    saveUninitialized: false,
     store,
     cookie: {
         sameSite: 'strict'
@@ -52,26 +52,34 @@ app.use(express.json())
 
 const axiosEndPoint = new axios.Axios()
 
+let consultationId = ''
+let startTime = ''
+
 app.get('/', (req, res) => {
     return res.status(200).json('initiated server connection')
 })
 
 app.get('/start-zoom-auth', (req, res) => {
-    const startTime = req.query.startTime
-    const teacher = req.query.teacher
-    const consultationId = req.query.consultationId
-    //@ts-ignore
-    if(!req.session?.startTimeVar){
-        //@ts-ignore
-        req.session.startTimeVar = startTime?.toString() ?? ""
+    if(consultationId || startTime)
+    {
+        return res.json(null)
     }
+    const start = req.query.startTime
+    // const teacher = req.query.teacher
+    const consultation = req.query.consultationId
     //@ts-ignore
-    req.session.teacherEmail = teacher?.toString() ?? ""
+    // if(!req.session?.startTimeVar){
+    //     //@ts-ignore
+    //     req.session.startTimeVar = startTime?.toString() ?? ""
+    // }
+    startTime = start?.toString() ?? ""
     //@ts-ignore
-    req.session.consultationId = consultationId?.toString() ?? ""
-    console.log(req.session.consultationId)
+    // req.session.teacherEmail = teacher?.toString() ?? ""
+    //@ts-ignore
+    consultationId = consultation?.toString() ?? ""
+    // console.log(req.session.consultationId)
     res.json({link: `https://zoom.us/oauth/authorize?response_type=code&client_id=aDq5XQyeTFOuObuUlzvenA&redirect_uri=${REDIRECT_URI}`})
-    res.end()
+    return res.end()
 })
 
 app.get('/auth/callback', async (req, res) => {
@@ -105,12 +113,13 @@ app.get('/auth/callback', async (req, res) => {
                     topic: 'Consultation Session',
                     type: 2,
                     //@ts-ignore
-                    start_time: JSON.parse(Object.values(req.sessionStore.sessions)[0].split(" ")[0]).startTimeVar,
+                    // start_time: JSON.parse(Object.values(req.sessionStore.sessions)[0].split(" ")[0]).startTimeVar,
+                    start_time: startTime,
                     duration: 60,
                     timezone: 'Africa/Cairo',
                     agenda: 'Consultation Session',
                     //@ts-ignore
-                    host_email: JSON.parse(Object.values(req.sessionStore.sessions)[0].split(" ")[0]).teacherEmail
+                    // host_email: JSON.parse(Object.values(req.sessionStore.sessions)[0].split(" ")[0]).teacherEmail
                 }
 
                 await fetch
@@ -128,25 +137,30 @@ app.get('/auth/callback', async (req, res) => {
                 .then(response => response.json())
                 .then(data => {
                     //@ts-ignore
-                    req.sessionStore.set(Object.keys(req.sessionStore.sessions)[0], {...JSON.parse(Object.values(req.sessionStore.sessions)[0].split(" ")[0]), join_url: data.join_url})
+                    // req.sessionStore.set(Object.keys(req.sessionStore.sessions)[0], {...JSON.parse(Object.values(req.sessionStore.sessions)[0].split(" ")[0]), join_url: data.join_url})
                     const db = admin.firestore()
                     // console.log('values: ', Object.values(req.sessionStore.sessions))
                     // console.log('valuesNoStore: ', req.sessionStore.sessions)
                     // console.log('valuesparsed: ', JSON.parse(Object.values(req.sessionStore.sessions)[0]))
                     //@ts-ignore
-                    const consultationId = JSON.parse(Object.values(req.sessionStore.sessions)[1].split(" ")[0]).consultationId
+                    // const consultationId = JSON.parse(Object.values(req.sessionStore.sessions)[1].split(" ")[0]).consultationId
+                    // const consultation = consultationId
                     const consultationRef = db.collection('consultationSessions').doc(consultationId);
 
                     consultationRef.update({ meetingLink: data.join_url })
+                }).then(() => {
+                    //@ts-ignore
+                    // req.session.destroy(() => req.sessionStore.destroy(Object.keys(req.sessionStore.sessions)[0]))
+                    res.redirect("https://eng-me-black.vercel.app")
+                    return res.end()
                 })
 
-                //@ts-ignore
-                req.session.destroy(() => req.sessionStore.destroy(Object.keys(req.sessionStore.sessions)[0]))
-                res.redirect("https://eng-me-black.vercel.app")
-                res.end()
             }
             catch(e)
             {
+                // req.session.destroy(() => req.sessionStore.destroy(Object.keys(req.sessionStore.sessions)[0]))
+                res.redirect("https://eng-me-black.vercel.app")
+                res.end()
                 console.log(e)
             }
         })
