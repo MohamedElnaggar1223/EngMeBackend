@@ -60,10 +60,10 @@ app.get('/', (req, res) => {
 })
 
 app.get('/start-zoom-auth', (req, res) => {
-    if(consultationId || startTime)
-    {
-        return res.json({link: null})
-    }
+    // if(consultationId || startTime)
+    // {
+    //     return res.json({link: null})
+    // }
     const start = req.query.startTime
     // const teacher = req.query.teacher
     const consultation = req.query.consultationId
