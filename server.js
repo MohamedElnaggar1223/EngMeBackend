@@ -47,7 +47,7 @@ app.use(session({
     }
 }));
 
-app.use(cors(corsOptions))
+app.use(cors())
 app.use(express.json())
 
 const axiosEndPoint = new axios.Axios()
