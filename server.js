@@ -85,6 +85,7 @@ app.get('/start-zoom-auth', (req, res) => {
 app.get('/auth/callback', async (req, res) => {
     const code = req.query.code;
     
+    
     try 
     {
         const newAxiosHeaders = new axios.AxiosHeaders({
