@@ -36,6 +36,11 @@ admin.initializeApp({
 const session = require('express-session');
 const store = new session.MemoryStore()
 const { v4: uuidv4 } = require('uuid');
+const path = require('path');
+
+app.get('/zoomverify', (req, res) => {
+    res.sendFile(path.join(__dirname, 'zoomverify', 'verifyzoom.html'))
+})
 
 app.use(session({
     secret: uuidv4(),
