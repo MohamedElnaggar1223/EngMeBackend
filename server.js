@@ -153,7 +153,7 @@ app.get('/auth/callback', async (req, res) => {
                     // req.session.destroy(() => req.sessionStore.destroy(Object.keys(req.sessionStore.sessions)[0]))
                     startTime = ''
                     consultationId = ''
-                    res.redirect("https://eng-me-black.vercel.app")
+                    res.redirect("https://engme.org")
                     return res.end()
                 })
 
@@ -161,7 +161,7 @@ app.get('/auth/callback', async (req, res) => {
             catch(e)
             {
                 // req.session.destroy(() => req.sessionStore.destroy(Object.keys(req.sessionStore.sessions)[0]))
-                res.redirect("https://eng-me-black.vercel.app")
+                res.redirect("https://engme.org")
                 res.end()
                 console.log(e)
             }
